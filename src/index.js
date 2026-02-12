@@ -47,13 +47,12 @@ app.get("/", (req, res) => {
 });
 
 
-// app.use("/api/v1", UserRouter);
-// app.use("/api/v1/contact", ContactRouter);
-// app.use("/api/v1/interview", InterviewRouter);
-// app.use("/api/v1/subscription", SubscriptionRouter);
-// app.use("/api/v1/admin", AdminRouter);
-// app.use("/api/v1/resume", ResumeRouter);
+app.use("/api/v1", UserRouter);
+app.use("/api/v1/contact", ContactRouter);
+app.use("/api/v1/interview", InterviewRouter);
+app.use("/api/v1/subscription", SubscriptionRouter);
+app.use("/api/v1/admin", AdminRouter);
+app.use("/api/v1/resume", ResumeRouter);
 
-// ❌ DO NOT use app.listen()
-// ✅ Just export app
+
 export default app;

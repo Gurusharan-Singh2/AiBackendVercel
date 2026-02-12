@@ -2,13 +2,16 @@ import { getRedis } from "../config/redis.js";
 
 const redis = getRedis();
 
-if (!redis.status || redis.status === "end") {
-  await redis.connect();
-}
+const ensureRedisConnection = async () => {
+  if (!redis.status || redis.status === "end") {
+    await redis.connect();
+  }
+};
 import { sendEmailandOtp, sendForget } from "./sendOtp.js";
 
 
 export const checkOtpRestrictions = async (identifier) => {
+  await ensureRedisConnection();
   const lockKey = `otp_lock:${identifier}`;
   const spamLockKey = `otp_spam_lock:${identifier}`;
   const cooldownKey = `otp_cooldown:${identifier}`;
@@ -42,6 +45,7 @@ export const checkOtpRestrictions = async (identifier) => {
 
 
 export const trackOtpRequests = async (identifier) => {
+  await ensureRedisConnection();
   const otpRequestKey = `otp_request_count:${identifier}`;
   const spamLockKey = `otp_spam_lock:${identifier}`;
 
@@ -63,6 +67,7 @@ export const trackOtpRequests = async (identifier) => {
 
 
 export const sendOtpByEmail = async (username, identifier) => {
+  await ensureRedisConnection();
   if (!identifier) {
     return {
       success: false,
@@ -90,6 +95,7 @@ export const sendOtpByEmail = async (username, identifier) => {
 };
 
 export const sendOtpByForget = async (username, identifier) => {
+  await ensureRedisConnection();
   if (!identifier) {
     return {
       success: false,
