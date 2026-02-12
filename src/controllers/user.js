@@ -9,9 +9,12 @@ import { getRedis } from "../config/redis.js";
 
 const redis = getRedis();
 
-if (!redis.status || redis.status === "end") {
-  await redis.connect();
-}
+
+const ensureRedisConnection = async () => {
+  if (!redis.status || redis.status === "end") {
+    await redis.connect();
+  }
+};
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { uploadToTebi } from "../libs/s3.js";
@@ -97,6 +100,7 @@ export const signupVerifyOtp = async (req, res) => {
       return res.status(400).json({ message: "OTP is required" });
     }
 
+    await ensureRedisConnection();
     const savedOtp = await redis.get(`otp:${email}`);
     if (!savedOtp) {
       return res.status(400).json({ message: "OTP expired or not found" });
@@ -142,6 +146,7 @@ export const signupVerifyOtp = async (req, res) => {
       console.error("Error assigning free subscription:", error);
     }
 
+    await ensureRedisConnection();
     await redis.del(`otp:${email}`);
 
     generateTokenAndSetCookie(res, { id: user.id, email: user.email });
@@ -291,6 +296,7 @@ export const verifyForgotPasswordOtp = async (req, res) => {
       return res.status(400).json({ message: "Email and OTP are required" });
     }
 
+    await ensureRedisConnection();
     const savedOtp = await redis.get(`otp:${email}`);
     if (!savedOtp) {
       return res.status(400).json({ message: "OTP expired or not found" });
@@ -319,6 +325,7 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: "Email and new password are required" });
     }
 
+    await ensureRedisConnection();
     const isVerified = await redis.get(`reset_verified:${email}`);
     if (!isVerified) {
       return res.status(403).json({ message: "OTP verification required" });
