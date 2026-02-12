@@ -39,6 +39,13 @@ app.get("/health", (req, res) => {
     message: "Server Running Good",
   });
 });
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "AI Backend is running 🚀",
+  });
+});
+
 
 app.use("/api/v1", UserRouter);
 app.use("/api/v1/contact", ContactRouter);
