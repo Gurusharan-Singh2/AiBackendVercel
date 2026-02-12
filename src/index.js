@@ -53,9 +53,9 @@ app.post("/api/v1/logout", (req, res) => {
 });
 
 
-// export default app;
+export default app;
 
-app.listen(8080, () => {
-  console.log('Server Started');
+// app.listen(8080, () => {
+//   console.log('Server Started');
 
-})
+// })
