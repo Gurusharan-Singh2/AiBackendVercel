@@ -32,7 +32,6 @@
     "mysql2": "^3.16.1",
     "pdf2json": "^4.0.2",
     "razorpay": "^2.9.6",
-    "serverless-http": "^4.0.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0"
