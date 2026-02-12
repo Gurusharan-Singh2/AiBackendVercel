@@ -1,4 +1,10 @@
-import redis from "../config/redis.js";
+import { getRedis } from "../config/redis.js";
+
+const redis = getRedis();
+
+if (!redis.status || redis.status === "end") {
+  await redis.connect();
+}
 import { sendEmailandOtp, sendForget } from "./sendOtp.js";
 
 
@@ -67,8 +73,8 @@ export const sendOtpByEmail = async (username, identifier) => {
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  await redis.set(`otp:${identifier}`, otp, "EX", 300); 
-  await redis.set(`otp_cooldown:${identifier}`, "1", "EX", 60); 
+  await redis.set(`otp:${identifier}`, otp, "EX", 300);
+  await redis.set(`otp_cooldown:${identifier}`, "1", "EX", 60);
 
   try {
     await sendEmailandOtp(username, identifier, otp);
@@ -94,8 +100,8 @@ export const sendOtpByForget = async (username, identifier) => {
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  await redis.set(`otp:${identifier}`, otp, "EX", 300); 
-  await redis.set(`otp_cooldown:${identifier}`, "1", "EX", 60); 
+  await redis.set(`otp:${identifier}`, otp, "EX", 300);
+  await redis.set(`otp_cooldown:${identifier}`, "1", "EX", 60);
 
   try {
     await sendForget(username, identifier, otp);

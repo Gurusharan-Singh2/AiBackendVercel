@@ -5,7 +5,13 @@ import {
   sendOtpByForget,
 } from "../utils/authHelper.js";
 import db from "../config/db.js";
-import redis from "../config/redis.js";
+import { getRedis } from "../config/redis.js";
+
+const redis = getRedis();
+
+if (!redis.status || redis.status === "end") {
+  await redis.connect();
+}
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { uploadToTebi } from "../libs/s3.js";
