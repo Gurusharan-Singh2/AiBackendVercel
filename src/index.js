@@ -47,6 +47,15 @@ app.use("/api/v1/interview", InterviewRouter);
 app.use("/api/v1/subscription", SubscriptionRouter);
 app.use("/api/v1/admin", AdminRouter);
 app.use("/api/v1/resume", ResumeRouter);
+app.post("/api/v1/logout", (req, res) => {
+  res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
+  res.json({ message: "Logged out successfully" });
+});
 
 
-export default app;
+// export default app;
+
+app.listen(8080, () => {
+  console.log('Server Started');
+
+})
