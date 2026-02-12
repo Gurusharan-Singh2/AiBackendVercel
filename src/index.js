@@ -1,6 +1,5 @@
 import express from "express";
-import swaggerUi from "swagger-ui-express";
-import fs from "fs";
+
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -12,10 +11,7 @@ import SubscriptionRouter from "./routes/subscription.js";
 import AdminRouter from "./routes/admin.routes.js";
 import ResumeRouter from "./routes/resume.js";
 
-// ✅ Safe way to load JSON in Vercel
-const swaggerDocument = JSON.parse(
-  fs.readFileSync(new URL("./swagger-output.json", import.meta.url))
-);
+
 
 const app = express();
 
@@ -31,8 +27,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Routes
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/health", (req, res) => {
   res.status(200).json({
